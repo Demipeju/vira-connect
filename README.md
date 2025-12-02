@@ -6,17 +6,9 @@ VIRA is a modern social-commerce platform designed for freelancers, creators, an
 
 Built with a minimalist and elegant UI inspired by modern SaaS platforms, VIRA focuses on speed, clarity, and user-friendliness.
 
-**URL Lovable**: https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2
----
-
-## 📸 **Preview**
-
 ![Project Image](https://github.com/Demipeju/vira-connect/blob/main/public/vira.png)
 
-```md
-![VIRA Screenshot](https://raw.githubusercontent.com/<your-username>/<repo-name>/main/path-to-image.png)
-```
-
+**URL Lovable**: https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2
 ---
 
 * Project Introduction
