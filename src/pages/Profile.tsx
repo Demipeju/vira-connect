@@ -6,8 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { User, Mail, MapPin, Phone, Camera, Wallet, CreditCard, Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Profile = () => {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -17,7 +20,7 @@ const Profile = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-3">
-              My <span className="text-gradient">Profile</span>
+              Hi, <span className="text-gradient">{user?.username}</span>
             </h1>
             <p className="text-muted-foreground">
               Manage your account settings and preferences
@@ -38,8 +41,8 @@ const Profile = () => {
                     <Camera className="w-5 h-5" />
                   </button>
                 </div>
-                <h2 className="text-xl font-bold mb-1">John Doe</h2>
-                <p className="text-sm text-muted-foreground mb-4">john.doe@example.com</p>
+                <h2 className="text-xl font-bold mb-1">{user?.username}</h2>
+                <p className="text-sm text-muted-foreground mb-4">{user?.email}</p>
                 <div className="flex items-center justify-center gap-2 text-xs text-accent mb-4">
                   <Shield className="w-4 h-4" />
                   <span>Verified Account</span>

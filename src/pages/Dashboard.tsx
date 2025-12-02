@@ -11,7 +11,22 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+const revenueData = [
+  { month: "Jan", revenue: 854 },
+  { month: "Feb", revenue: 1120 },
+  { month: "Mar", revenue: 1456 },
+  { month: "Apr", revenue: 1687 },
+  { month: "May", revenue: 1923 },
+  { month: "Jun", revenue: 2134 },
+  { month: "Jul", revenue: 2458 },
+  { month: "Aug", revenue: 2187 },
+  { month: "Sep", revenue: 1876 },
+  { month: "Oct", revenue: 1654 },
+  { month: "Nov", revenue: 1432 },
+  { month: "Dec", revenue: 1187 },
+];
 
 const Dashboard = () => {
   const stats = [
@@ -122,12 +137,30 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Revenue Chart Placeholder */}
+              {/* Revenue Chart */}
               <div className="glass rounded-2xl p-6">
-                <h3 className="text-xl font-bold mb-4">Revenue Overview</h3>
-                <div className="h-64 flex items-center justify-center bg-muted/20 rounded-xl">
-                  <p className="text-muted-foreground">Chart coming soon...</p>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-xl font-bold mb-1">Monthly Revenue</h3>
+                    <p className="text-2xl font-bold text-primary">$12,458</p>
+                    <p className="text-xs text-muted-foreground">Total for 2024</p>
+                  </div>
                 </div>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="month" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--background))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
 
               {/* Recent Orders */}

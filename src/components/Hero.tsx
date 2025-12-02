@@ -1,18 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, TrendingUp, Users } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    if (isAuthenticated) {
+      navigate("/marketplace");
+    } else {
+      navigate("/auth");
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-hero opacity-10 animate-glow" />
-      <div className="absolute inset-0 bg-gradient-glow" />
-      
-      {/* Sparkle effects */}
-      <div className="absolute top-20 left-10 w-2 h-2 rounded-full bg-primary animate-sparkle" style={{ animationDelay: '0s' }} />
-      <div className="absolute top-40 right-20 w-3 h-3 rounded-full bg-accent animate-sparkle" style={{ animationDelay: '1s' }} />
-      <div className="absolute bottom-40 left-1/4 w-2 h-2 rounded-full bg-primary-glow animate-sparkle" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/3 right-1/3 w-2 h-2 rounded-full bg-accent animate-sparkle" style={{ animationDelay: '1.5s' }} />
+      {/* Clean gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -35,11 +41,13 @@ const Hero = () => {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground hover-glow group">
-              Start Selling
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground hover-glow group" asChild>
+              <a href="/auth">
+                Start Selling
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
-            <Button size="lg" variant="outline" className="border-2 hover:bg-accent/10 hover:border-accent">
+            <Button size="lg" variant="outline" className="border-2 hover:bg-accent/10 hover:border-accent" onClick={handleExploreClick}>
               Explore Marketplace
             </Button>
           </div>

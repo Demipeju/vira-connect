@@ -4,53 +4,42 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Store, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { signup, login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/marketplace");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const tab = form.dataset.tab; // "signin" or "signup"
+    const tab = form.dataset.tab;
 
     setTimeout(() => {
       if (tab === "signup") {
-        // Save user in localStorage
-        const newUser = {
-          name: formData.get("signup-name"),
-          email: formData.get("signup-email"),
-          password: formData.get("signup-password"),
-          accountType: formData.get("account-type"),
-        };
-        localStorage.setItem("viraUser", JSON.stringify(newUser));
-        navigate("/marketplace"); // redirect after signup
+        const username = formData.get("signup-username") as string;
+        const email = formData.get("signup-email") as string;
+        const password = formData.get("signup-password") as string;
+        signup(username, email, password);
       } else if (tab === "signin") {
-        const savedUser = localStorage.getItem("viraUser");
-        if (!savedUser) {
-          setError("No user found. Please sign up first.");
-          setIsLoading(false);
-          return;
-        }
-        const user = JSON.parse(savedUser);
-        if (
-          user.email === formData.get("email") &&
-          user.password === formData.get("password")
-        ) {
-          // Successful login
-          navigate("/marketplace"); // redirect after login
-        } else {
-          setError("Invalid email or password.");
-        }
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+        login(email, password);
       }
       setIsLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   return (
@@ -106,8 +95,6 @@ const Auth = () => {
                     <a href="#" className="text-primary hover:text-primary/80">Forgot password?</a>
                   </div>
 
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
-
                   <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" disabled={isLoading}>
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
@@ -117,10 +104,10 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form data-tab="signup" onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Label htmlFor="signup-username">Username</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input id="signup-name" name="signup-name" type="text" placeholder="John Doe" className="pl-10 bg-background/50" required />
+                      <Input id="signup-username" name="signup-username" type="text" placeholder="johndoe" className="pl-10 bg-background/50" required />
                     </div>
                   </div>
 
@@ -138,15 +125,6 @@ const Auth = () => {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input id="signup-password" name="signup-password" type="password" placeholder="••••••••" className="pl-10 bg-background/50" required />
                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="account-type">I want to</Label>
-                    <select id="account-type" name="account-type" className="w-full px-3 py-2 rounded-lg border border-input bg-background/50 text-foreground">
-                      <option value="buyer">Buy products</option>
-                      <option value="seller">Sell products</option>
-                      <option value="both">Both</option>
-                    </select>
                   </div>
 
                   <div className="flex items-start gap-2 text-sm">

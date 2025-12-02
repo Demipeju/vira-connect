@@ -1,84 +1,88 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, SlidersHorizontal, Star, Heart, TrendingUp } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { storesData } from "@/data/stores";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
-const categories = ["All", "Fashion", "Electronics", "Crafts", "Beauty", "Home & Living", "Art"];
-
-const stores = [
-  {
-    id: 1,
-    name: "Artisan Pottery Studio",
-    category: "Handmade Crafts",
-    image: "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=400&h=300&fit=crop",
-    rating: 4.9,
-    reviews: 234,
-    sales: "500+",
-    verified: true,
-  },
-  {
-    id: 2,
-    name: "Tech Gadgets Hub",
-    category: "Electronics",
-    image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=300&fit=crop",
-    rating: 4.8,
-    reviews: 456,
-    sales: "1.2K+",
-    verified: true,
-  },
-  {
-    id: 3,
-    name: "Vintage Fashion Co",
-    category: "Fashion & Style",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=300&fit=crop",
-    rating: 5.0,
-    reviews: 189,
-    sales: "800+",
-    verified: true,
-  },
-  {
-    id: 4,
-    name: "Organic Wellness",
-    category: "Health & Beauty",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop",
-    rating: 4.7,
-    reviews: 312,
-    sales: "600+",
-    verified: false,
-  },
-  {
-    id: 5,
-    name: "Modern Home Decor",
-    category: "Home & Living",
-    image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=300&fit=crop",
-    rating: 4.9,
-    reviews: 421,
-    sales: "950+",
-    verified: true,
-  },
-  {
-    id: 6,
-    name: "Creative Art Studio",
-    category: "Art",
-    image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&h=300&fit=crop",
-    rating: 4.6,
-    reviews: 198,
-    sales: "380+",
-    verified: false,
-  },
-];
+const categories = ["All", "Fashion", "Electronics", "Crafts", "Books", "Beauty", "Home & Living", "Art"];
 
 const Marketplace = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("popular");
+  const [favourites, setFavourites] = useState<number[]>(() => {
+    const saved = localStorage.getItem("viraFavourites");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
+
+  const toggleFavourite = (storeId: number) => {
+    const newFavourites = favourites.includes(storeId)
+      ? favourites.filter((id) => id !== storeId)
+      : [...favourites, storeId];
+    
+    setFavourites(newFavourites);
+    localStorage.setItem("viraFavourites", JSON.stringify(newFavourites));
+    
+    if (newFavourites.includes(storeId)) {
+      toast.success("Added to favourites!");
+    } else {
+      toast.success("Removed from favourites");
+    }
+  };
+
+  const filteredAndSortedStores = useMemo(() => {
+    let filtered = storesData;
+
+    // Filter by category
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter((store) =>
+        store.category.toLowerCase().includes(selectedCategory.toLowerCase())
+      );
+    }
+
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (store) =>
+          store.name.toLowerCase().includes(query) ||
+          store.category.toLowerCase().includes(query) ||
+          store.seller.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by favourites
+    if (showFavouritesOnly) {
+      filtered = filtered.filter((store) => favourites.includes(store.id));
+    }
+
+    // Sort
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case "popular":
+        sorted.sort((a, b) => parseInt(b.sales) - parseInt(a.sales));
+        break;
+      case "rating":
+        sorted.sort((a, b) => b.rating - a.rating);
+        break;
+      case "a-z":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "z-a":
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        break;
+    }
+
+    return sorted;
+  }, [selectedCategory, searchQuery, sortBy, showFavouritesOnly, favourites]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,22 +108,28 @@ const Marketplace = () => {
                 <Input
                   placeholder="Search stores, products, or sellers..."
                   className="pl-10 bg-background/50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Select>
+              <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-full md:w-48 bg-background/50">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="popular">Most Popular</SelectItem>
                   <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="sales">Top Sales</SelectItem>
-                  <SelectItem value="recent">Recently Added</SelectItem>
+                  <SelectItem value="a-z">A-Z</SelectItem>
+                  <SelectItem value="z-a">Z-A</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" className="gap-2">
-                <SlidersHorizontal className="w-4 h-4" />
-                Filters
+              <Button
+                variant={showFavouritesOnly ? "default" : "outline"}
+                className="gap-2"
+                onClick={() => setShowFavouritesOnly(!showFavouritesOnly)}
+              >
+                <Heart className={`w-4 h-4 ${showFavouritesOnly ? "fill-current" : ""}`} />
+                Favourites {favourites.length > 0 && `(${favourites.length})`}
               </Button>
             </div>
 
@@ -142,59 +152,66 @@ const Marketplace = () => {
           </div>
 
           {/* Store Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {stores.map((store) => (
-              <a
-                key={store.id}
-                href={`/storefront/${store.id}`}
-                className="glass rounded-2xl overflow-hidden hover-lift group cursor-pointer"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={store.image}
-                    alt={store.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  {store.verified && (
-                    <div className="absolute top-3 left-3 px-2 py-1 rounded-full glass-dark text-xs text-white font-medium">
-                      ✓ Verified
+          {filteredAndSortedStores.length === 0 ? (
+            <div className="glass rounded-2xl p-12 text-center">
+              <p className="text-muted-foreground">No stores found matching your criteria</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredAndSortedStores.map((store) => (
+                <div key={store.id} className="glass rounded-2xl overflow-hidden hover-lift group">
+                  <Link to={`/storefront/${store.id}`}>
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={store.image}
+                        alt={store.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {store.verified && (
+                        <div className="absolute top-3 left-3 px-2 py-1 rounded-full glass-dark text-xs text-white font-medium">
+                          ✓ Verified
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <button className="absolute top-3 right-3 w-8 h-8 rounded-full glass-dark flex items-center justify-center hover:bg-primary/20 transition-colors">
-                    <Heart className="w-4 h-4 text-white" />
+
+                    <div className="p-5">
+                      <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                        {store.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {store.category}
+                      </p>
+
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 text-accent fill-accent" />
+                          <span className="font-medium text-foreground">{store.rating}</span>
+                          <span>({store.reviews})</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3 text-primary" />
+                          <span>{store.sales}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFavourite(store.id);
+                    }}
+                    className="absolute top-3 right-3 w-8 h-8 rounded-full glass-dark flex items-center justify-center hover:bg-primary/20 transition-colors z-10"
+                  >
+                    <Heart
+                      className={`w-4 h-4 text-white ${
+                        favourites.includes(store.id) ? "fill-current" : ""
+                      }`}
+                    />
                   </button>
                 </div>
-
-                <div className="p-5">
-                  <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    {store.name}
-                  </h3>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    {store.category}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-3 h-3 text-accent fill-accent" />
-                      <span className="font-medium text-foreground">{store.rating}</span>
-                      <span>({store.reviews})</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3 text-primary" />
-                      <span>{store.sales}</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="border-2">
-              Load More Stores
-            </Button>
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
 
