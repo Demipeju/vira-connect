@@ -1,39 +1,188 @@
-# Welcome to your Lovable project
+# 🛍️ **VIRA — Social Commerce Platform**
 
-## Project info
+**Where Commerce Meets Community**
 
-**URL**: https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2
+VIRA is a modern social-commerce platform designed for freelancers, creators, and small businesses. It allows sellers to create storefronts, manage orders, and connect with buyers while offering a clean, beautiful, and intuitive shopping experience.
 
-## How can I edit this code?
+Built with a minimalist and elegant UI inspired by modern SaaS platforms, VIRA focuses on speed, clarity, and user-friendliness.
 
-There are several ways of editing your application.
+**URL Lovable**: https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2
+---
 
-**Use Lovable**
+## 📸 **Preview**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2) and start prompting.
+![VIRA Screenshot](https://raw.githubusercontent.com/Demipeju/vira-connect/refs/heads/main/public/vira.png?token=GHSAT0AAAAAADPTKGIL2NXZJ5BBF6ZE4XEG2JOTKEA)
 
-Changes made via Lovable will be committed automatically to this repo.
+```md
+![VIRA Screenshot](https://raw.githubusercontent.com/<your-username>/<repo-name>/main/path-to-image.png)
+```
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+* Project Introduction
+* Features
+* How It Works
+* Tech Stack
+* Folder Structure
+* Installation & Setup
+* Screenshots / Images
+* Contribution
+* License (optional)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 **Key Features**
 
-Follow these steps:
+**🔐 Authentication & Access Control**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+* Full Sign Up / Sign In flow
+* Username stored + shown in profile (“Hi, <username>”)
+* Auth state saved in localStorage
+* Protects restricted pages (Dashboard, Orders, Marketplace, etc.)
+* Non-logged-in users automatically redirected to Sign In
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+### **🛒 Marketplace**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+* Realistic marketplace with multiple stores:
+
+  * Nike
+  * Phone Shop
+  * Bookstore
+  * Perfume Shop
+  * Wigs & Beauty Store
+  * Artisan Pottery Studio
+* Each store has:
+
+  * Banner, description, seller name
+  * Product listings
+  * “Place Order” button
+  * LocalStorage-based order saving
+* Search + Sort fully functional
+* Add stores to favourites (saved in localStorage)
+
+---
+
+### **📦 Orders System**
+
+* Every completed purchase reflects in the Orders page
+* Orders persist using localStorage
+* Includes product name, store, price, and date
+* Clean customer order management view
+
+---
+
+### **📊 Seller Dashboard**
+
+* Monthly revenue analytics chart
+* Total revenue capped at `$12,458`
+* July is the highest earning month
+* Displays:
+
+  * Revenue graph
+  * Store statistics
+  * Recent store orders
+
+---
+
+### **👤 User Profile**
+
+* Dynamic greeting: “Hi, <username>”
+* Placeholder editable fields (prepared for backend integration)
+* Shows favourites, orders, and profile details
+
+---
+
+### **💙 Beautiful Landing Page**
+
+* Static light-blue & blue-green gradient
+* Modern CTA and minimal design
+* “Explore Marketplace” redirects based on login state
+
+---
+
+## 🧱 **Tech Stack**
+
+### **Frontend**
+
+* React + TypeScript
+* Vite
+* TailwindCSS
+* React Router
+* Recharts (dashboard analytics)
+* LocalStorage (temporary user/session storage)
+
+### **Tools / Build**
+
+* Vite bundler
+* ES Modules
+* GitHub for version control
+
+---
+
+## 📁 **Project Structure**
+
+```plaintext
+src/
+│
+├── components/       # Reusable UI components
+├── pages/            # App pages (Marketplace, Dashboard, Auth, etc.)
+├── hooks/            # Custom hooks
+├── lib/              # Utils & helpers
+├── App.tsx           # App routing
+├── main.tsx          # Entry point
+└── index.css         # Global styles
+```
+
+---
+
+## ⚙️ **Installation & Setup**
+
+Clone the repo:
+
+```bash
+git clone https://github.com/<your-username>/<your-repo>.git
+cd <your-repo>
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
 npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+---
+
+## 🤝 **Contributing**
+
+Pull requests are welcome.
+For major changes, please open an issue first to discuss what you’d like to change.
+
+---
+
+## 📜 **License**
+
+(Optional — choose MIT, Apache, GPL, etc.)
+
+```md
+This project is licensed under the MIT License.
 ```
 
 **Edit a file directly in GitHub**
@@ -63,11 +212,6 @@ This project is built with:
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
