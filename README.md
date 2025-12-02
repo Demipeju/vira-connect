@@ -8,7 +8,6 @@ Built with a minimalist and elegant UI inspired by modern SaaS platforms, VIRA f
 
 ![Project Image](https://github.com/Demipeju/vira-connect/blob/main/public/vira.png)
 
-**URL Lovable**: https://lovable.dev/projects/6c386644-43fb-4bd5-9810-2097b4aaf0a2
 ---
 
 * Project Introduction
@@ -21,7 +20,7 @@ Built with a minimalist and elegant UI inspired by modern SaaS platforms, VIRA f
 * Contribution
 * License (optional)
 
-## 🚀 **Key Features**
+### 🚀 **Key Features**
 
 **🔐 Authentication & Access Control**
 
