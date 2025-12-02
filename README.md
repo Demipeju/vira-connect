@@ -11,7 +11,7 @@ Built with a minimalist and elegant UI inspired by modern SaaS platforms, VIRA f
 
 ## 📸 **Preview**
 
-![VIRA Screenshot](https://raw.githubusercontent.com/Demipeju/vira-connect/refs/heads/main/public/vira.png?token=GHSAT0AAAAAADPTKGIL2NXZJ5BBF6ZE4XEG2JOTKEA)
+![VIRA Screenshot](https://github.com/Demipeju/vira-connect/refs/heads/main/public/vira.png)
 
 ```md
 ![VIRA Screenshot](https://raw.githubusercontent.com/<your-username>/<repo-name>/main/path-to-image.png)
