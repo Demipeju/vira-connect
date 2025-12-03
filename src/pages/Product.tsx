@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Heart, Share2, ShoppingCart, MessageCircle, Shield, Truck, RotateCcw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 const productImages = [
   "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&h=600&fit=crop",
@@ -15,6 +17,31 @@ const productImages = [
 const Product = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const handlePlaceOrder = () => {
+    const existingOrders = JSON.parse(localStorage.getItem("viraOrders") || "[]");
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      date: new Date().toISOString().split("T")[0],
+      items: quantity,
+      total: 89.99 * quantity,
+      status: "processing",
+      store: "Artisan Pottery Studio",
+      products: [
+        {
+          name: "Handmade Ceramic Vase",
+          price: 89.99,
+          quantity: quantity,
+          image: productImages[0],
+        },
+      ],
+    };
+    localStorage.setItem("viraOrders", JSON.stringify([newOrder, ...existingOrders]));
+    toast.success("Order placed successfully!");
+    navigate("/orders");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -116,7 +143,7 @@ const Product = () => {
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Add to Cart
                 </Button>
-                <Button variant="outline" className="flex-1">
+                <Button variant="outline" className="flex-1" onClick={handlePlaceOrder}>
                   Buy Now
                 </Button>
               </div>

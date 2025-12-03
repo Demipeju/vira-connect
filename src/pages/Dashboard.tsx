@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,22 +14,24 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
+// Realistic monthly revenue with natural variation - August is highest
 const revenueData = [
-  { month: "Jan", revenue: 854 },
-  { month: "Feb", revenue: 1120 },
-  { month: "Mar", revenue: 1456 },
-  { month: "Apr", revenue: 1687 },
-  { month: "May", revenue: 1923 },
-  { month: "Jun", revenue: 2134 },
-  { month: "Jul", revenue: 2458 },
-  { month: "Aug", revenue: 2187 },
-  { month: "Sep", revenue: 1876 },
-  { month: "Oct", revenue: 1654 },
-  { month: "Nov", revenue: 1432 },
-  { month: "Dec", revenue: 1187 },
+  { month: "Jan", revenue: 687 },
+  { month: "Feb", revenue: 923 },
+  { month: "Mar", revenue: 1156 },
+  { month: "Apr", revenue: 845 },
+  { month: "May", revenue: 1342 },
+  { month: "Jun", revenue: 1089 },
+  { month: "Jul", revenue: 1567 },
+  { month: "Aug", revenue: 1823 },
+  { month: "Sep", revenue: 1234 },
+  { month: "Oct", revenue: 978 },
+  { month: "Nov", revenue: 1456 },
+  { month: "Dec", revenue: 1358 },
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const stats = [
     {
       title: "Total Revenue",
@@ -104,7 +107,10 @@ const Dashboard = () => {
                 Welcome back! Here's what's happening with your store.
               </p>
             </div>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={() => navigate("/seller-store")}
+            >
               View Store
             </Button>
           </div>
