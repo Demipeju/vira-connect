@@ -226,7 +226,7 @@ const Storefront = () => {
                     <h3 className="text-2xl font-bold mb-4">Our Story</h3>
                     <div className="prose prose-sm max-w-none text-muted-foreground">
                       <p className="mb-4">
-                        Welcome to Artisan Pottery Studio! We're a small, family-owned business dedicated to creating beautiful, functional pottery that brings joy to everyday life.
+                        Welcome to Artisan Pottery Studio! We're a small, family-owned business dedicated to creating beautiful, functional pottery that brings joy to your home and everyday life.
                       </p>
                       <p className="mb-4">
                         Each piece is carefully handcrafted using traditional techniques passed down through generations. We believe in sustainable practices and use locally-sourced clay whenever possible.

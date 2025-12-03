@@ -10,9 +10,9 @@ const conversations = [
     id: 1,
     name: "Artisan Pottery Studio",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop",
-    lastMessage: "Thanks for your interest!",
-    time: "2m ago",
-    unread: 2,
+    lastMessage: "Absolutely! We offer custom orders.!",
+    time: "20m ago",
+    unread: 0,
     online: true,
   },
   {

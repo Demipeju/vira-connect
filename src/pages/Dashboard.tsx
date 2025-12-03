@@ -70,23 +70,23 @@ const Dashboard = () => {
   const recentOrders = [
     {
       id: "ORD-001",
-      product: "Handmade Ceramic Vase",
-      customer: "Sarah Johnson",
-      amount: "$89.99",
+      product: "Adidas Soccer Ball",
+      customer: "Lionel Messi",
+      amount: "$30.99",
       status: "Completed",
     },
     {
       id: "ORD-002",
-      product: "Artisan Coffee Mug Set",
+      product: "Nike Basketball Shoes",
       customer: "Mike Chen",
-      amount: "$45.00",
+      amount: "$120.00",
       status: "Processing",
     },
     {
       id: "ORD-003",
-      product: "Decorative Pottery Bowl",
-      customer: "Emma Wilson",
-      amount: "$65.00",
+      product: "Wilson Tennis Racket",
+      customer: "David Brent",
+      amount: "$90.00",
       status: "Shipped",
     },
   ];
@@ -149,7 +149,7 @@ const Dashboard = () => {
                   <div>
                     <h3 className="text-xl font-bold mb-1">Monthly Revenue</h3>
                     <p className="text-2xl font-bold text-primary">$12,458</p>
-                    <p className="text-xs text-muted-foreground">Total for 2024</p>
+                    <p className="text-xs text-muted-foreground">Total for 2025</p>
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
@@ -231,9 +231,9 @@ const Dashboard = () => {
                 <h3 className="text-xl font-bold mb-4">Top Products</h3>
                 <div className="space-y-3">
                   {[
-                    { name: "Ceramic Vase", sales: 156 },
-                    { name: "Coffee Mug Set", sales: 142 },
-                    { name: "Pottery Bowl", sales: 98 },
+                    { name: "Sports Water Bottle", sales: 512 },
+                    { name: "Athletic Performance Socks", sales: 445 },
+                    { name: "Soccer Jersey - Home Kit", sales: 312 },
                   ].map((product, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <span className="text-sm">{product.name}</span>
