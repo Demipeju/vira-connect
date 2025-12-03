@@ -1,10 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, MessageCircle, Share2, Heart, ShoppingBag, TrendingUp } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { toast } from "sonner";
 const products = [
   {
     id: 1,
@@ -41,6 +42,36 @@ const products = [
 ];
 
 const Storefront = () => {
+  const navigate = useNavigate();
+
+  const handleProductClick = (productId: number) => {
+    navigate(`/product/${productId}`);
+  };
+
+  const handlePlaceOrder = (e: React.MouseEvent, product: typeof products[0]) => {
+    e.stopPropagation();
+    const existingOrders = JSON.parse(localStorage.getItem("viraOrders") || "[]");
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      date: new Date().toISOString().split("T")[0],
+      items: 1,
+      total: product.price,
+      status: "processing",
+      store: "Artisan Pottery Studio",
+      products: [
+        {
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          image: product.image,
+        },
+      ],
+    };
+    localStorage.setItem("viraOrders", JSON.stringify([newOrder, ...existingOrders]));
+    toast.success("Order placed successfully!");
+    navigate("/orders");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -141,9 +172,9 @@ const Storefront = () => {
                 <TabsContent value="products">
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {products.map((product) => (
-                      <a
+                      <div
                         key={product.id}
-                        href={`/product/${product.id}`}
+                        onClick={() => handleProductClick(product.id)}
                         className="glass rounded-2xl overflow-hidden hover-lift group cursor-pointer"
                       >
                         <div className="relative h-64 overflow-hidden">
@@ -152,7 +183,10 @@ const Storefront = () => {
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
-                          <button className="absolute top-3 right-3 w-8 h-8 rounded-full glass-dark flex items-center justify-center hover:bg-primary/20 transition-colors">
+                          <button 
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute top-3 right-3 w-8 h-8 rounded-full glass-dark flex items-center justify-center hover:bg-primary/20 transition-colors"
+                          >
                             <Heart className="w-4 h-4 text-white" />
                           </button>
                         </div>
@@ -162,7 +196,7 @@ const Storefront = () => {
                             {product.name}
                           </h3>
                           
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between mb-3">
                             <span className="text-xl font-bold text-primary">
                               ${product.price}
                             </span>
@@ -172,8 +206,17 @@ const Storefront = () => {
                               <span className="text-muted-foreground">({product.sales})</span>
                             </div>
                           </div>
+                          
+                          <Button 
+                            onClick={(e) => handlePlaceOrder(e, product)}
+                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                            size="sm"
+                          >
+                            <ShoppingBag className="w-4 h-4 mr-2" />
+                            Place Order
+                          </Button>
                         </div>
-                      </a>
+                      </div>
                     ))}
                   </div>
                 </TabsContent>
