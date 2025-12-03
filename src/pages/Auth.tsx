@@ -2,14 +2,16 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Store, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { ShoppingBag, Mail, Lock, User, ArrowLeft, Phone, UserCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<"buyer" | "seller">("buyer");
   const { signup, login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -30,9 +32,11 @@ const Auth = () => {
     setTimeout(() => {
       if (tab === "signup") {
         const username = formData.get("signup-username") as string;
+        const fullName = formData.get("signup-fullname") as string;
         const email = formData.get("signup-email") as string;
+        const phone = formData.get("signup-phone") as string;
         const password = formData.get("signup-password") as string;
-        signup(username, email, password);
+        signup(username, fullName, email, phone, password, selectedRole);
       } else if (tab === "signin") {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
@@ -51,13 +55,13 @@ const Auth = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-md mx-auto">
-          <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to Home
-          </a>
+          </Link>
 
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="w-12 h-12 rounded-xl bg-gradient-hero flex items-center justify-center">
-              <Store className="w-7 h-7 text-primary-foreground" />
+              <ShoppingBag className="w-7 h-7 text-primary-foreground" />
             </div>
             <span className="text-3xl font-bold">VIRA</span>
           </div>
@@ -112,10 +116,26 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
+                    <Label htmlFor="signup-fullname">Full Name</Label>
+                    <div className="relative">
+                      <UserCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input id="signup-fullname" name="signup-fullname" type="text" placeholder="John Doe" className="pl-10 bg-background/50" required />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input id="signup-email" name="signup-email" type="email" placeholder="you@example.com" className="pl-10 bg-background/50" required />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-phone">Phone Number</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input id="signup-phone" name="signup-phone" type="tel" placeholder="+1 (555) 123-4567" className="pl-10 bg-background/50" required />
                     </div>
                   </div>
 
@@ -125,6 +145,20 @@ const Auth = () => {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input id="signup-password" name="signup-password" type="password" placeholder="••••••••" className="pl-10 bg-background/50" required />
                     </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label>I want to</Label>
+                    <RadioGroup value={selectedRole} onValueChange={(value) => setSelectedRole(value as "buyer" | "seller")} className="grid grid-cols-2 gap-3">
+                      <div className={`flex items-center space-x-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${selectedRole === "buyer" ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}>
+                        <RadioGroupItem value="buyer" id="buyer" />
+                        <Label htmlFor="buyer" className="cursor-pointer font-medium">Buy Products</Label>
+                      </div>
+                      <div className={`flex items-center space-x-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${selectedRole === "seller" ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}>
+                        <RadioGroupItem value="seller" id="seller" />
+                        <Label htmlFor="seller" className="cursor-pointer font-medium">Sell Products</Label>
+                      </div>
+                    </RadioGroup>
                   </div>
 
                   <div className="flex items-start gap-2 text-sm">

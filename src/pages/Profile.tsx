@@ -1,15 +1,24 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { User, Mail, MapPin, Phone, Camera, Wallet, CreditCard, Shield } from "lucide-react";
+import { User, Mail, MapPin, Phone, Camera, Wallet, CreditCard, Shield, UserCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
+  const [address, setAddress] = useState(user?.address || "");
+  const [bio, setBio] = useState(user?.bio || "");
+
+  const handleSaveProfile = () => {
+    updateUser({ address, bio });
+    toast.success("Profile updated successfully!");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -32,23 +41,22 @@ const Profile = () => {
             <div className="lg:col-span-1">
               <div className="glass rounded-2xl p-6 text-center">
                 <div className="relative inline-block mb-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop"
-                    alt="Profile"
-                    className="w-32 h-32 rounded-full object-cover mx-auto border-4 border-background shadow-strong"
-                  />
+                  <div className="w-32 h-32 rounded-full mx-auto border-4 border-background shadow-strong bg-muted flex items-center justify-center">
+                    <UserCircle className="w-20 h-20 text-muted-foreground" />
+                  </div>
                   <button className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover-glow">
                     <Camera className="w-5 h-5" />
                   </button>
                 </div>
-                <h2 className="text-xl font-bold mb-1">{user?.username}</h2>
-                <p className="text-sm text-muted-foreground mb-4">{user?.email}</p>
+                <h2 className="text-xl font-bold mb-1">{user?.fullName || user?.username}</h2>
+                <p className="text-sm text-muted-foreground mb-2">{user?.email}</p>
+                <p className="text-xs text-primary mb-4 capitalize">{user?.role} Account</p>
                 <div className="flex items-center justify-center gap-2 text-xs text-accent mb-4">
                   <Shield className="w-4 h-4" />
                   <span>Verified Account</span>
                 </div>
                 <Button variant="outline" className="w-full">
-                  Edit Profile Picture
+                  Upload Profile Picture
                 </Button>
               </div>
             </div>
@@ -66,27 +74,29 @@ const Profile = () => {
                 <TabsContent value="profile">
                   <div className="glass rounded-2xl p-8">
                     <h3 className="text-2xl font-bold mb-6">Personal Information</h3>
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="firstName">First Name</Label>
+                          <Label htmlFor="username">Username</Label>
                           <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                             <Input
-                              id="firstName"
-                              defaultValue="John"
+                              id="username"
+                              value={user?.username || ""}
                               className="pl-10 bg-background/50"
+                              disabled
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="lastName">Last Name</Label>
+                          <Label htmlFor="fullName">Full Name</Label>
                           <div className="relative">
-                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <UserCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                             <Input
-                              id="lastName"
-                              defaultValue="Doe"
+                              id="fullName"
+                              value={user?.fullName || ""}
                               className="pl-10 bg-background/50"
+                              disabled
                             />
                           </div>
                         </div>
@@ -99,8 +109,9 @@ const Profile = () => {
                           <Input
                             id="email"
                             type="email"
-                            defaultValue="john.doe@example.com"
+                            value={user?.email || ""}
                             className="pl-10 bg-background/50"
+                            disabled
                           />
                         </div>
                       </div>
@@ -112,8 +123,9 @@ const Profile = () => {
                           <Input
                             id="phone"
                             type="tel"
-                            defaultValue="+1 (555) 123-4567"
+                            value={user?.phone || ""}
                             className="pl-10 bg-background/50"
+                            disabled
                           />
                         </div>
                       </div>
@@ -124,7 +136,9 @@ const Profile = () => {
                           <MapPin className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                           <Textarea
                             id="address"
-                            defaultValue="123 Main St, Portland, OR 97201"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Enter your address..."
                             className="pl-10 bg-background/50 min-h-[100px]"
                           />
                         </div>
@@ -134,16 +148,18 @@ const Profile = () => {
                         <Label htmlFor="bio">Bio</Label>
                         <Textarea
                           id="bio"
+                          value={bio}
+                          onChange={(e) => setBio(e.target.value)}
                           placeholder="Tell us about yourself..."
                           className="bg-background/50 min-h-[120px]"
                         />
                       </div>
 
                       <div className="flex gap-3">
-                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                        <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                           Save Changes
                         </Button>
-                        <Button variant="outline">Cancel</Button>
+                        <Button type="button" variant="outline">Cancel</Button>
                       </div>
                     </form>
                   </div>
@@ -156,7 +172,7 @@ const Profile = () => {
                       <div className="flex items-center justify-between mb-6">
                         <div>
                           <p className="text-sm opacity-80 mb-1">Available Balance</p>
-                          <h2 className="text-4xl font-bold">$1,245.80</h2>
+                          <h2 className="text-4xl font-bold">$0.00</h2>
                         </div>
                         <Wallet className="w-12 h-12 opacity-80" />
                       </div>
@@ -173,40 +189,14 @@ const Profile = () => {
                     {/* Transaction History */}
                     <div className="glass rounded-2xl p-8">
                       <h3 className="text-2xl font-bold mb-6">Recent Transactions</h3>
-                      <div className="space-y-4">
-                        {[
-                          { type: "Sale", amount: "+$89.99", date: "Jan 20, 2024", status: "completed" },
-                          { type: "Purchase", amount: "-$45.00", date: "Jan 18, 2024", status: "completed" },
-                          { type: "Withdrawal", amount: "-$200.00", date: "Jan 15, 2024", status: "pending" },
-                        ].map((transaction, index) => (
-                          <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-background/50">
-                            <div className="flex items-center gap-4">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                transaction.type === "Sale"
-                                  ? "bg-accent/20"
-                                  : transaction.type === "Purchase"
-                                  ? "bg-primary/20"
-                                  : "bg-muted"
-                              }`}>
-                                <CreditCard className="w-5 h-5" />
-                              </div>
-                              <div>
-                                <p className="font-medium">{transaction.type}</p>
-                                <p className="text-sm text-muted-foreground">{transaction.date}</p>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <p className={`font-bold ${
-                                transaction.amount.startsWith("+") ? "text-accent" : "text-foreground"
-                              }`}>
-                                {transaction.amount}
-                              </p>
-                              <p className="text-xs text-muted-foreground capitalize">
-                                {transaction.status}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+                      <div className="flex flex-col items-center justify-center py-12">
+                        <div className="w-24 h-24 mb-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                          <CreditCard className="w-12 h-12 text-primary/50" />
+                        </div>
+                        <h4 className="font-semibold mb-2">No transactions yet</h4>
+                        <p className="text-sm text-muted-foreground text-center max-w-xs">
+                          Your transaction history will appear here once you start making purchases or sales
+                        </p>
                       </div>
                     </div>
                   </div>
