@@ -136,7 +136,7 @@ git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
 
 ---
 
-### ✅ **2. Navigate to the directory **
+### ✅ **2. Navigate to the directory**
 
 ```bash
 cd YOUR_REPO
@@ -170,7 +170,7 @@ git pull origin branch1
 
 ---
 
-### ✅ **5. To install dependencies (Very Important!)**
+### ✅ **6. To install dependencies (Very Important!)**
 
 ```bash
 npm install
@@ -178,7 +178,7 @@ npm install
 
 ---
 
-### ✅ **5. To run the development server**
+### ✅ **7. To run the development server**
 
 ```bash
 npm run dev
@@ -186,7 +186,7 @@ npm run dev
 
 ---
 
-### ✅ *6. To stage changes*
+### ✅ *8. To stage changes*
 
 ```bash
 git add .
@@ -194,7 +194,7 @@ git add .
 
 ---
 
-### ✅ **7. To commit changes**
+### ✅ **9. To commit changes**
 
 ```bash
 git commit -m "update Message"
@@ -202,7 +202,7 @@ git commit -m "update Message"
 
 ---
 
-### ✅ **8. To push to branch1**
+### ✅ **10. To push to branch1**
 
 ```bash
 git push origin branch1
