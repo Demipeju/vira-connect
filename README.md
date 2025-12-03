@@ -126,37 +126,86 @@ src/
 
 ---
 
-## ⚙️ **Installation & Setup**
+### **How to Pull and Work on `branch1`**
 
-Clone the repo:
+### ✅ **1. Clone the Repository (if they don’t have it yet)**
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
 ```
 
-Install dependencies:
+---
+
+### ✅ **2. Navigate to the directory **
+
+```bash
+cd YOUR_REPO
+```
+
+---
+
+### ✅ **3. Fetch All Branches**
+
+```bash
+git fetch --all
+```
+
+---
+
+### ✅ **4. Switch to `branch1`(Very Important)**
+
+```bash
+git checkout branch1
+```
+
+If the branch isn’t local yet, this command will create a local copy and switch to it.
+
+---
+
+### ✅ **5. Pull the Latest Updates (Very Important!)**
+
+```bash
+git pull origin branch1
+```
+
+---
+
+### ✅ **5. To install dependencies (Very Important!)**
 
 ```bash
 npm install
 ```
 
-Run the development server:
+---
+
+### ✅ **5. To run the development server**
 
 ```bash
 npm run dev
 ```
 
-Build for production:
+---
+
+### ✅ *6. To stage changes*
 
 ```bash
-npm run build
+git add .
 ```
 
-Preview the production build:
+---
+
+### ✅ **7. To commit changes**
 
 ```bash
-npm run preview
+git commit -m "update Message"
+```
+
+---
+
+### ✅ **8. To push to branch1**
+
+```bash
+git push origin branch1
 ```
 
 ---
