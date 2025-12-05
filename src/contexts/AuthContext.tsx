@@ -4,15 +4,22 @@ import { toast } from "sonner";
 
 interface User {
   username: string;
+  fullName: string;
   email: string;
+  phone: string;
+  role: "buyer" | "seller";
+  hasStore?: boolean;
+  address?: string;
+  bio?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => boolean;
-  signup: (username: string, email: string, password: string) => void;
+  signup: (username: string, fullName: string, email: string, phone: string, password: string, role: "buyer" | "seller") => void;
   logout: () => void;
+  updateUser: (updates: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,10 +35,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const signup = (username: string, email: string, password: string) => {
-    const newUser = { username, email };
+  const signup = (username: string, fullName: string, email: string, phone: string, password: string, role: "buyer" | "seller") => {
+    const newUser: User = { username, fullName, email, phone, role, hasStore: false };
     localStorage.setItem("viraUser", JSON.stringify(newUser));
     localStorage.setItem("viraPassword", password);
+    // Clear orders and messages for new users
+    localStorage.removeItem("viraOrders");
+    localStorage.removeItem("viraConversations");
     setUser(newUser);
     toast.success("Account created successfully!");
     navigate("/marketplace");
@@ -64,6 +74,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     navigate("/");
   };
 
+  const updateUser = (updates: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...updates };
+      setUser(updatedUser);
+      localStorage.setItem("viraUser", JSON.stringify(updatedUser));
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -72,6 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         signup,
         logout,
+        updateUser,
       }}
     >
       {children}

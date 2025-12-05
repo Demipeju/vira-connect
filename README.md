@@ -170,10 +170,10 @@ For major changes, please open an issue first to discuss what you’d like to ch
 
 ## 📜 **License**
 
-(Optional — choose MIT, Apache, GPL, etc.)
+(No license yet)
 
 ```md
-This project is licensed under the MIT License.
+This project is soon to be licensed under the MIT License.
 ```
 
 **Edit a file directly in GitHub**
