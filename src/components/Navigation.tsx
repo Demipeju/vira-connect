@@ -1,3 +1,4 @@
+import logo from "@/components/ui/logo.png"; 
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,10 +15,11 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/40">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
+          
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-hero flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5 text-primary-foreground" />
+          <Link to="/" className="flex items-center gap-2 mt-2"> {/* mt-2 adds a little margin from top */}
+            <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center"> {/* slightly bigger container */}
+              <img src={logo} alt="VIRA Logo" className="w-full h-full object-cover" />
             </div>
             <span className="text-xl font-bold text-foreground">VIRA</span>
           </Link>
